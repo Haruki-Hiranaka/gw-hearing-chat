@@ -1,0 +1,35 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/686346199237/locations/global/workloadIdentityPools/github-pool/providers/github-gw-hearing
+          service_account: github-actions-deploy@personal-finance-app-493508.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy gw-hearing-chat \
+            --source . \
+            --region asia-northeast1 \
+            --allow-unauthenticated \
+            --set-env-vars "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},GEMINI_CHAT_MODEL=${{ secrets.GEMINI_CHAT_MODEL }},GEMINI_SUGGEST_MODEL=${{ secrets.GEMINI_SUGGEST_MODEL }}" \
+            --timeout 300 \
+            --memory 512Mi \
+            --port 8080 \
+            --quiet
