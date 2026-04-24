@@ -119,3 +119,49 @@ export function messagesToContents(messages: Message[]): Content[] {
       parts: [{ text: m.content }],
     }));
 }
+
+/**
+ * Robustly extract a JSON value from model output.
+ * Handles: plain JSON, markdown code fences, and text with embedded JSON.
+ */
+export function extractJSON(raw: string): unknown | null {
+  // 1. Try direct parse
+  try {
+    return JSON.parse(raw);
+  } catch {
+    // continue
+  }
+
+  // 2. Strip markdown code fences (```json ... ``` or ``` ... ```)
+  const fenceMatch = raw.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/i);
+  if (fenceMatch) {
+    try {
+      return JSON.parse(fenceMatch[1].trim());
+    } catch {
+      // continue
+    }
+  }
+
+  // 3. Find the first { ... } or [ ... ] block (greedy)
+  const braceStart = raw.indexOf("{");
+  const bracketStart = raw.indexOf("[");
+  const start =
+    braceStart === -1
+      ? bracketStart
+      : bracketStart === -1
+        ? braceStart
+        : Math.min(braceStart, bracketStart);
+  if (start !== -1) {
+    const closer = raw[start] === "{" ? "}" : "]";
+    const end = raw.lastIndexOf(closer);
+    if (end > start) {
+      try {
+        return JSON.parse(raw.slice(start, end + 1));
+      } catch {
+        // continue
+      }
+    }
+  }
+
+  return null;
+}
