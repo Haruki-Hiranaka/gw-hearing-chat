@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #faf6ef;
+  --paper-edge: #f0e9da;
+  --ink: #1a1512;
+  --vermillion: #c0392b;
+  --grid-line: rgba(26, 21, 18, 0.045);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif;
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.01em;
+}
+
+body {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+  min-height: 100dvh;
+}
+
+/* Quiet scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 21, 18, 0.14);
+  border-radius: 999px;
+  border: 2px solid var(--paper);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 21, 18, 0.28);
+}
+
+/* Selection */
+::selection {
+  background: rgba(192, 57, 43, 0.22);
+  color: var(--ink);
+}
+
+/* Textarea reset */
+textarea {
+  font-family: inherit;
+}
+
+/* Hanko (stamp) effect — used on hero seal */
+.hanko {
+  background: var(--vermillion);
+  color: #faf2e8;
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.25em;
+  text-indent: 0.25em;
+  box-shadow:
+    0 0 0 2px rgba(192, 57, 43, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  transform: rotate(-4deg);
+}
+
+/* Dotted divider */
+.dotted-rule {
+  background-image: radial-gradient(
+    circle,
+    rgba(26, 21, 18, 0.28) 1px,
+    transparent 1px
+  );
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+  background-position: center;
+  height: 8px;
+}
+
+/* Typing dots */
+@keyframes typingBounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.35;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.typing-dot {
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
