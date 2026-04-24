@@ -102,7 +102,7 @@ export const chatGenerationConfig: GenerationConfig = {
 export const suggestGenerationConfig: GenerationConfig = {
   temperature: 0.85,
   topP: 0.95,
-  maxOutputTokens: 2048,
+  maxOutputTokens: 8192,
   responseMimeType: "application/json",
   responseSchema: suggestResponseSchema,
 };
