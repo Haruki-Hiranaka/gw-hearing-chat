@@ -117,7 +117,7 @@ export async function POST(req: Request) {
     if (parsed === null) {
       console.error("[/api/suggest] non-JSON output:", raw.slice(0, 800));
       return NextResponse.json(
-        { error: "Model returned non-JSON output." },
+        { error: "Model returned non-JSON output.", debug_raw: raw.slice(0, 1000), debug_candidates: JSON.stringify(result.response.candidates?.[0]?.content).slice(0, 1000) },
         { status: 502 }
       );
     }
