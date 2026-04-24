@@ -92,11 +92,14 @@ export async function POST(req: Request) {
       contents: messagesToContents(messages),
     });
 
-    const text = result.response.text();
+    const raw = result.response.text();
+    // Strip markdown code fences that some models wrap around JSON output
+    const text = raw.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
     let parsed: unknown;
     try {
       parsed = JSON.parse(text);
     } catch {
+      console.error("[/api/chat] non-JSON output:", raw.slice(0, 500));
       return NextResponse.json(
         { error: "Model returned non-JSON output." },
         { status: 502 }
