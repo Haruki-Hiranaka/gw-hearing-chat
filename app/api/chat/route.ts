@@ -18,6 +18,7 @@ import { EMPTY_SLOTS, SLOT_KEYS } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 /** Accept only strict shape; reject anything else. */
 function parseBody(raw: unknown): ChatRequest | null {

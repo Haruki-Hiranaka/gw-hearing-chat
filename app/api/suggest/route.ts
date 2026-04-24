@@ -19,6 +19,7 @@ import { EMPTY_SLOTS } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 function parseBody(raw: unknown): SuggestRequest | null {
   if (!raw || typeof raw !== "object") return null;
@@ -117,7 +118,7 @@ export async function POST(req: Request) {
     if (parsed === null) {
       console.error("[/api/suggest] non-JSON output:", raw.slice(0, 800));
       return NextResponse.json(
-        { error: "Model returned non-JSON output.", debug_raw: raw.slice(0, 1000), debug_candidates: JSON.stringify(result.response.candidates?.[0]?.content).slice(0, 1000) },
+        { error: "Model returned non-JSON output." },
         { status: 502 }
       );
     }
